@@ -1,6 +1,7 @@
 package ru.skillbranch.skillarticles.viewmodels
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import ru.skillbranch.skillarticles.data.AppSettings
 import ru.skillbranch.skillarticles.data.ArticleData
 import ru.skillbranch.skillarticles.data.ArticlePersonalInfo
@@ -12,6 +13,8 @@ import ru.skillbranch.skillarticles.extensions.format
 class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleState>(ArticleState()), IArticleViewModel {
 
     private val repository = ArticleRepository
+
+    private val query = mutableLiveData("")
 
     init {
         // subscribe on mutable data
@@ -131,6 +134,20 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
 
     override fun handleSearch(query: String?) {
         TODO("Not yet implemented")
+    }
+
+    fun handleSearchQuery(text: String) {
+        query.value = text
+    }
+
+    fun <T> mutableLiveData(defaultValue: T? = null): MutableLiveData<T> {
+        val data = MutableLiveData<T>()
+
+        if (defaultValue != null) {
+            data.value = defaultValue
+        }
+
+        return data
     }
 }
 
