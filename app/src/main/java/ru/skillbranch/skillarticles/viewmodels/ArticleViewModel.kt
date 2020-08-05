@@ -14,7 +14,8 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
 
     private val repository = ArticleRepository
 
-    private val query = mutableLiveData("")
+    private val searchText = mutableLiveData("")
+    private val searchMode = mutableLiveData(false)
 
     init {
         // subscribe on mutable data
@@ -125,19 +126,22 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
 
     override fun handleToggleMenu() {
         updateState { it.copy(isShowMenu = !it.isShowMenu) }
-
     }
 
     override fun handleSearchMode(isSearch: Boolean) {
-        TODO("Not yet implemented")
+        searchMode.value = isSearch
     }
 
     override fun handleSearch(query: String?) {
-        TODO("Not yet implemented")
+        searchText.value = query
     }
 
-    fun handleSearchQuery(text: String) {
-        query.value = text
+    fun getSearchMode() : Boolean? {
+        return searchMode.value
+    }
+
+    fun getSearchText() : String? {
+        return searchText.value
     }
 
     fun <T> mutableLiveData(defaultValue: T? = null): MutableLiveData<T> {
@@ -146,7 +150,6 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
         if (defaultValue != null) {
             data.value = defaultValue
         }
-
         return data
     }
 }

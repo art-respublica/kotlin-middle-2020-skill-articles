@@ -1,9 +1,11 @@
 package ru.skillbranch.skillarticles.ui
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.Menu
 import android.widget.ImageView
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
@@ -58,14 +60,26 @@ class RootActivity : AppCompatActivity() {
         val searchItem = menu?.findItem(R.id.action_search)
         val searchView = searchItem?.actionView as SearchView
         searchView.queryHint = "Введите строку поиска"
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+
+        if (viewModel.getSearchMode() == true) {
+            searchItem.expandActionView();
+            searchView.setQuery(viewModel.getSearchText(), true);
+            searchView.clearFocus();
+        }
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.handleSearchQuery(query)
+                viewModel.handleSearch(query)
+                viewModel.handleSearchMode(!TextUtils.isEmpty(query))
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
-                viewModel.handleSearchQuery(newText)
+                viewModel.handleSearch(newText)
+                viewModel.handleSearchMode(!TextUtils.isEmpty(newText))
                 return true
             }
         })
