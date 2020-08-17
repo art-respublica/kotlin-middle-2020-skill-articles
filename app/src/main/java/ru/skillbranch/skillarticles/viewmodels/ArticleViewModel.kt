@@ -14,9 +14,6 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
 
     private val repository = ArticleRepository
 
-    private val searchText = mutableLiveData("")
-    private val searchMode = mutableLiveData(false)
-
     init {
         // subscribe on mutable data
         subscribeOnDataSource(getArticleData()) { article, state ->
@@ -129,19 +126,11 @@ class ArticleViewModel(private val articleId: String) : BaseViewModel<ArticleSta
     }
 
     override fun handleSearchMode(isSearch: Boolean) {
-        searchMode.value = isSearch
+        updateState { it.copy(isSearch = isSearch) }
     }
 
     override fun handleSearch(query: String?) {
-        searchText.value = query
-    }
-
-    fun getSearchMode() : Boolean? {
-        return searchMode.value
-    }
-
-    fun getSearchText() : String? {
-        return searchText.value
+        updateState { it.copy(searchQuery = query) }
     }
 
     fun <T> mutableLiveData(defaultValue: T? = null): MutableLiveData<T> {

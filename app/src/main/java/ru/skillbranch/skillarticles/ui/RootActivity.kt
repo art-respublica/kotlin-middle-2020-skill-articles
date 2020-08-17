@@ -1,10 +1,8 @@
 package ru.skillbranch.skillarticles.ui
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -25,6 +23,8 @@ import ru.skillbranch.skillarticles.viewmodels.ViewModelFactory
 class RootActivity : AppCompatActivity() {
 
     private lateinit var viewModel: ArticleViewModel
+    private var searchQuery: String? = null
+    private var isSearching = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,49 +37,52 @@ class RootActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this, vmFactory).get(ArticleViewModel::class.java)
         viewModel.observeState(this) {
             renderUi(it)
+
+            // restore search mode
+            if (it.isSearch) {
+                isSearching = true
+                searchQuery = it.searchQuery
+            }
         }
 
         viewModel.observeNotifications(this) {
             renderNotification(it)
         }
-
-//        btn_like.setOnClickListener {
-//            Snackbar.make(coordinator_container, "test", Snackbar.LENGTH_LONG)
-//                .setAnchorView(bottombar)
-//                .show()
-//        }
-//
-//        switch_mode.setOnClickListener {
-//            delegate.localNightMode = if (switch_mode.isChecked) AppCompatDelegate.MODE_NIGHT_YES
-//            else AppCompatDelegate.MODE_NIGHT_NO
-//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search, menu)
-        val searchItem = menu?.findItem(R.id.action_search)
-        val searchView = searchItem?.actionView as SearchView
-        searchView.queryHint = "Введите строку поиска"
+        val menuItem = menu?.findItem(R.id.action_search)
+        val searchView = menuItem?.actionView as? SearchView
+        searchView?.queryHint = getString(R.string.article_search_placeholder)
 
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-
-        if (viewModel.getSearchMode() == true) {
-            searchItem.expandActionView();
-            searchView.setQuery(viewModel.getSearchText(), true);
-            searchView.clearFocus();
+        // restore SearchView
+        if (isSearching) {
+            menuItem?.expandActionView();
+            searchView?.setQuery(searchQuery, false);
+            searchView?.clearFocus();
         }
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        menuItem?.setOnActionExpandListener(object: MenuItem.OnActionExpandListener {
+            override fun onMenuItemActionExpand(item: MenuItem?): Boolean {
+                viewModel.handleSearchMode(true)
+                return true
+            }
+
+            override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
+                viewModel.handleSearchMode(false)
+                return true
+            }
+        })
+
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.handleSearch(query)
-                viewModel.handleSearchMode(!TextUtils.isEmpty(query))
                 return true
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 viewModel.handleSearch(newText)
-                viewModel.handleSearchMode(!TextUtils.isEmpty(newText))
                 return true
             }
         })

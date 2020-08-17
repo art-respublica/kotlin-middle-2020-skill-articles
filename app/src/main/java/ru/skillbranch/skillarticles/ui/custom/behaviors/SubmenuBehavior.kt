@@ -1,15 +1,19 @@
 package ru.skillbranch.skillarticles.ui.custom.behaviors
 
+import android.content.Context
+import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.math.MathUtils
 import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
+import androidx.core.view.marginRight
 import ru.skillbranch.skillarticles.ui.custom.ArticleSubmenu
 import ru.skillbranch.skillarticles.ui.custom.Bottombar
 
-class SubmenuBehavior : CoordinatorLayout.Behavior<ArticleSubmenu>() {
+class SubmenuBehavior() : CoordinatorLayout.Behavior<ArticleSubmenu>() {
+    constructor(context: Context, attrs: AttributeSet) : this()
 
     // set view as dependent on bottombar
     override fun layoutDependsOn(
@@ -35,7 +39,7 @@ class SubmenuBehavior : CoordinatorLayout.Behavior<ArticleSubmenu>() {
     }
 
     private fun animate(child: ArticleSubmenu, dependency: Bottombar) {
-        val fraction = dependency.translationY / dependency.minHeight
-        child.translationY = (child.height + child.marginBottom) * fraction
+        val fraction = dependency.translationY / dependency.height
+        child.translationX = (child.width + child.marginRight) * fraction
     }
 }

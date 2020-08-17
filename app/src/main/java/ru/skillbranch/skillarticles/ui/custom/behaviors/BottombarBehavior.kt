@@ -6,7 +6,7 @@ import androidx.core.math.MathUtils
 import androidx.core.view.ViewCompat
 import ru.skillbranch.skillarticles.ui.custom.Bottombar
 
-class BottombarBehavior : CoordinatorLayout.Behavior<Bottombar>() {
+class BottombarBehavior() : CoordinatorLayout.Behavior<Bottombar>() {
 
     override fun onStartNestedScroll(
         coordinatorLayout: CoordinatorLayout,
@@ -28,11 +28,8 @@ class BottombarBehavior : CoordinatorLayout.Behavior<Bottombar>() {
         consumed: IntArray,
         type: Int
     ) {
-        // dy < 0 scroll down
-        // dy > 0 scroll up
         val offset = MathUtils.clamp(child.translationY + dy, 0f, child.minHeight.toFloat())
         if (offset != child.translationY) child.translationY = offset
-//        Log.e("BottomBehaviour", "dy : $dy translationY : ${child.translationY}")
         super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
     }
 }
