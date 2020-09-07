@@ -37,3 +37,7 @@ fun Context.dpToIntPx(dp: Int): Int {
 //            cm.activeNetworkInfo?.run { isConnectedOrConnecting } ?: false
 //        }
 //    }
+
+fun Context.attrValue(colorSecondary: Int): Int {
+    return colorSecondary
+}
