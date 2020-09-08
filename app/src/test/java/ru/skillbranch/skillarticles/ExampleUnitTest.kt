@@ -183,7 +183,7 @@ class ExampleUnitTest {
     }
 
     //optionally (delete @Ignore fo run)
-//    @Ignore
+    @Ignore
     @Test
     fun parse_all_with_optionally() {
         val result = MarkdownParser.parse(markdownString)
