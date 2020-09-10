@@ -204,7 +204,7 @@ object MarkdownParser {
                     // text with "1. "
                     val reg = "^\\d+.".toRegex().find(string.subSequence(startIndex, endIndex))
                     val size = reg!!.value.length
-                    val order = string.subSequence(startIndex, startIndex.plus(size.dec())).toString()
+                    val order = string.subSequence(startIndex, startIndex.plus(size)).toString()
                     text = string.subSequence(startIndex.plus(size.inc()), endIndex)
 
                     // find inner elements
