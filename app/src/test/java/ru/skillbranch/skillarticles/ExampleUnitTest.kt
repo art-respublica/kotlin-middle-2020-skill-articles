@@ -138,6 +138,28 @@ class ExampleUnitTest {
     }
 
     @Test
+    fun parse_ordered_list_item() {
+        val result = MarkdownParser.parse(orderedListString)
+        val actual = prepare<Element.OrderedListItem>(result.elements)
+        assertEquals(expectedOrderedList, actual)
+//
+//        printResults(actual)
+//        println(" ")
+//        printElements(result.elements)
+    }
+
+    @Test
+    fun parse_block_code() {
+        val result = MarkdownParser.parse(blockCodeString)
+        val actual = prepare<Element.BlockCode>(result.elements)
+        assertEquals(expectedBlockCode, actual)
+
+        printResults(actual)
+        println(" ")
+        printElements(result.elements)
+    }
+
+    @Test
     fun parse_all() {
         val result = MarkdownParser.parse(markdownString)
         val actualUnorderedList = prepare<Element.UnorderedListItem>(result.elements)
@@ -168,6 +190,7 @@ class ExampleUnitTest {
 //        printElements(result.elements)
     }
 
+    @Ignore
     @Test
     fun clear_all() {
         val result = MarkdownParser.clear(markdownString)
@@ -175,7 +198,7 @@ class ExampleUnitTest {
     }
 
     //optionally (delete @Ignore fo run)
-    @Ignore
+//    @Ignore
     @Test
     fun clear_all_with_optionally() {
         val result = MarkdownParser.clear(markdownString)
@@ -183,7 +206,7 @@ class ExampleUnitTest {
     }
 
     //optionally (delete @Ignore fo run)
-    @Ignore
+//    @Ignore
     @Test
     fun parse_all_with_optionally() {
         val result = MarkdownParser.parse(markdownString)
@@ -199,8 +222,8 @@ class ExampleUnitTest {
         val actualLinks = result.elements.spread()
             .filterIsInstance<Element.Link>()
             .map { it.link }
-//        val actualBlockCode = prepare<Element.BlockCode>(result.elements) //optionally
-//        val actualOrderedList = prepare<Element.OrderedListItem>(result.elements) //optionally
+        val actualBlockCode = prepare<Element.BlockCode>(result.elements) //optionally
+        val actualOrderedList = prepare<Element.OrderedListItem>(result.elements) //optionally
 
         assertEquals(expectedMarkdown["unorderedList"], actualUnorderedList)
         assertEquals(expectedMarkdown["header"], actualHeaders)
@@ -212,8 +235,8 @@ class ExampleUnitTest {
         assertEquals(expectedMarkdown["inline"], actualInline)
         assertEquals(expectedMarkdown["linkTitles"], actualLinkTitles)
         assertEquals(expectedMarkdown["links"], actualLinks)
-//        assertEquals(expectedMarkdown["multiline"], actualBlockCode) //optionally
-//        assertEquals(expectedMarkdown["orderedList"], actualOrderedList) //optionally
+        assertEquals(expectedMarkdown["multiline"], actualBlockCode) //optionally
+        assertEquals(expectedMarkdown["orderedList"], actualOrderedList) //optionally
 
 //        println(" ")
 //        printElements(result.elements)

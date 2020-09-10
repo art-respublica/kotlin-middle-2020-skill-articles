@@ -139,6 +139,30 @@ val expectedLink: Map<String, List<String>> = mapOf(
 )
 
 
+val orderedListString: String = """
+before simple text
+1. Unordered list can use asterisks list
+2. Or minuses
+3. Or pluses
+after simple text
+""".trimIndent()
+val expectedOrderedList: List<String> = listOf(
+    "Unordered list can use asterisks list",
+    "Or minuses",
+    "Or pluses"
+)
+
+val blockCodeString: String = """
+```code block
+code block
+code block```
+""".trimIndent()
+val expectedBlockCode: List<String> = listOf(
+    "code block\n",
+    "code block\n",
+    "code block"
+)
+
 val markdownString = """
 before header text
 # Header1 first line margin middle line without margin last line with margin

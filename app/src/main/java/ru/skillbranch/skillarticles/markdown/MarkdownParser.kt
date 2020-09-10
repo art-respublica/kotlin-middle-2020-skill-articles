@@ -16,10 +16,13 @@ object MarkdownParser {
     private const val RULE_GROUP = "(^[-_*]{3}$)"
     private const val INLINE_GROUP = "((?<!`)`[^`\\s].*?[^`\\s]?`(?!`))"
     private const val LINK_GROUP = "(\\[[^\\[\\]]*?]\\(.+?\\)|^\\[*?]\\(.*?\\))"
+    private const val ORDERED_LIST_ITEM_GROUP = "(^\\d+\\. .+$)"
+    private const val BLOCK_CODE_GROUP = "(^`{3}[\\S\\s]*?`{3}$)"
 
     // result regex
     private const val MARKDOWN_GROUPS = "$UNORDERED_LIST_ITEM_GROUP|$HEADER_GROUP|$QUOTE_GROUP" +
-            "|$ITALIC_GROUP|$BOLD_GROUP|$STRIKE_GROUP|$RULE_GROUP|$INLINE_GROUP|$LINK_GROUP"
+            "|$ITALIC_GROUP|$BOLD_GROUP|$STRIKE_GROUP|$RULE_GROUP|$INLINE_GROUP|$LINK_GROUP" +
+            "|$ORDERED_LIST_ITEM_GROUP|$BLOCK_CODE_GROUP"
 
     private val elementsPattern by lazy { Pattern.compile(MARKDOWN_GROUPS, Pattern.MULTILINE) }
 
@@ -85,7 +88,7 @@ object MarkdownParser {
             var text: CharSequence
 
             // groups range for iterate by groups
-            val groups = 1..9
+            val groups = 1..11
             var group = -1
             for (gr in groups) {
                 if (matcher.group(gr) != null) {
@@ -189,12 +192,52 @@ object MarkdownParser {
                 9 -> {
                     // full text for regex
                     text = string.subSequence(startIndex, endIndex)
-                    val (title:String, link: String) = "\\[(.*)]\\((.*)\\)".toRegex().find(text)!!.destructured
+                    val (title: String, link: String) = "\\[(.*)]\\((.*)\\)".toRegex()
+                        .find(text)!!.destructured
                     val element = Element.Link(link, title)
                     parents.add(element)
                     lastStartIndex = endIndex
                 }
 
+                // ORDERED LIST
+                10 -> {
+                    // text with "1. "
+                    val reg = "^\\d+.".toRegex().find(string.subSequence(startIndex, endIndex))
+                    val size = reg!!.value.length
+                    val order = string.subSequence(startIndex, startIndex.plus(size.dec())).toString()
+                    text = string.subSequence(startIndex.plus(size.inc()), endIndex)
+
+                    // find inner elements
+                    val subs = findElements(text)
+                    val element = Element.OrderedListItem(order, text, subs)
+                    parents.add(element)
+
+                    // next find start from position "endIndex"  (last regex character)
+                    lastStartIndex = endIndex
+                }
+
+                // BLOCK CODE
+                11 -> {
+                    // text without "```{}```"
+                    text = string.subSequence(startIndex.plus(3), endIndex.plus(-3))
+
+                    val subs = mutableListOf<Element.BlockCode>()
+                    val lines = text.lines()
+                    if (lines.size == 1) {
+                        subs.add(Element.BlockCode(Element.BlockCode.Type.SINGLE, text))
+                    } else {
+                        for (i in lines.indices) {
+                            when (i) {
+                                0 -> subs.add(Element.BlockCode(Element.BlockCode.Type.START, lines[i] + "\n"))
+                                lines.size - 1 -> subs.add(Element.BlockCode(Element.BlockCode.Type.END, lines[i]))
+                                else -> subs.add(Element.BlockCode(Element.BlockCode.Type.MIDDLE, lines[i] + "\n"))
+                            }
+                        }
+                    }
+
+                    parents.addAll(subs)
+                    lastStartIndex = endIndex
+                }
             }
         }
 
