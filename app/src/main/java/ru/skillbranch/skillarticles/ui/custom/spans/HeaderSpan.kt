@@ -1,4 +1,4 @@
-package ru.skillbranch.skillarticles.markdown.spans
+package ru.skillbranch.skillarticles.ui.custom.spans
 
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,7 +9,6 @@ import android.text.TextPaint
 import android.text.style.LeadingMarginSpan
 import android.text.style.LineHeightSpan
 import android.text.style.MetricAffectingSpan
-import android.view.Gravity.apply
 import androidx.annotation.ColorInt
 import androidx.annotation.IntRange
 import androidx.annotation.Px
@@ -43,6 +42,11 @@ class HeaderSpan constructor(
         6 to 0.85f
     )
 
+    var topExtraPadding = 0
+    var bottomExtarPadding = 0
+    lateinit var firstLineBounds: kotlin.ranges.IntRange
+    lateinit var lastLineBounds: kotlin.ranges.IntRange
+
     override fun chooseHeight(
         text: CharSequence?,
         start: Int,
@@ -60,15 +64,19 @@ class HeaderSpan constructor(
         if (spanStart == start) {
             originAscent = fm.ascent
             fm.ascent = (fm.ascent - marginTop).toInt()
+            topExtraPadding = marginTop.toInt()
+            firstLineBounds = start..end.dec()
         } else {
             fm.ascent = originAscent
         }
 
         // line break +1 character
         if (spanEnd == end.dec()) {
+            val originDescent = fm.descent
             val originHeight = fm.descent - originAscent
             fm.descent = (originHeight * linePadding + marginBottom).toInt()
-
+            bottomExtarPadding = fm.descent - originDescent
+            lastLineBounds = start..end.dec()
         }
 
         fm.top = fm.ascent
