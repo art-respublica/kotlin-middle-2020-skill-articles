@@ -36,7 +36,7 @@ class MarkdownBuilder(context: Context) {
 
     fun markdownToSpan(textContent: MarkdownElement.Text): SpannedString {
         return buildSpannedString {
-            textContent.elements.forEach{buildElement(it, this)}
+            textContent.elements.forEach { buildElement(it, this) }
         }
     }
 

@@ -38,7 +38,7 @@ class SearchBgHelper(
         ColorUtils.setAlphaComponent(secondaryColor, 160)  //colorSecondary with 160 alpha
 
     private val drawable: Drawable by lazy {
-        GradientDrawable().apply {
+        mockDrawable ?: GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadii = FloatArray(8).apply { fill(radius, 0, size) }
             color = ColorStateList.valueOf(alphaColor)
@@ -47,7 +47,7 @@ class SearchBgHelper(
     }
 
     private val drawableLeft: Drawable by lazy {
-        GradientDrawable().apply {
+        mockDrawable ?: GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadii = floatArrayOf(
                 radius, radius,    // Top left radius in px
@@ -61,7 +61,7 @@ class SearchBgHelper(
     }
 
     private val drawableMiddle: Drawable by lazy {
-        GradientDrawable().apply {
+        mockDrawable ?: GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             color = ColorStateList.valueOf(alphaColor)
             setStroke(borderWidth, secondaryColor)
@@ -69,7 +69,7 @@ class SearchBgHelper(
     }
 
     private val drawableRight: Drawable by lazy {
-        GradientDrawable().apply {
+        mockDrawable ?: GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             cornerRadii = floatArrayOf(
                 0f, 0f,          // Top left radius in px

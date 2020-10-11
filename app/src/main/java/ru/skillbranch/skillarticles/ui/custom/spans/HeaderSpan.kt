@@ -103,9 +103,6 @@ class HeaderSpan constructor(
         lineTop: Int, lineBaseline: Int, lineBottom: Int, text: CharSequence?, lineStart: Int,
         lineEnd: Int, isFirstLine: Boolean, layout: Layout?
     ) {
-//        val oldSize = paint.textSize
-//        paint.textSize *= sizes[level]!!
-
         // for 1 or 2 level and last line
         if ((level == 1 || level == 2) && (text as Spanned).getSpanEnd(this) == lineEnd) {
             paint.forLine {
@@ -121,9 +118,6 @@ class HeaderSpan constructor(
                 )
             }
         }
-
-//        canvas.drawFontLines(lineTop, lineBottom, lineBaseline, paint)
-//        paint.textSize = oldSize
     }
 
     private fun Canvas.drawFontLines(
@@ -135,12 +129,9 @@ class HeaderSpan constructor(
         drawLine(0f, top + 0f, width + 0f, top + 0f, Paint().apply { color = Color.BLUE })
         drawLine(0f, bottom + 0f, width + 0f, bottom + 0f, Paint().apply { color = Color.BLUE })
         drawLine(0f, lineBaseline + 0f, width + 0f, lineBaseline + 0f, Paint().apply { color = Color.BLUE })
-//        drawLine(0f, paint.ascent() + lineBaseline, width + 0f, paint.ascent() + lineBaseline, Paint().apply { color = Color.BLUE })
-//        drawLine(0f, paint.descent() + lineBaseline, width + 0f, paint.descent() + lineBaseline, Paint().apply { color = Color.BLUE })
     }
 
     override fun getLeadingMargin(first: Boolean): Int {
-        //TODO implement me
         return 0
     }
 

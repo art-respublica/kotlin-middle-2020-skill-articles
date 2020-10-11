@@ -14,7 +14,7 @@ import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.extensions.attrValue
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 
-@SuppressLint("ViewConstructor", "AppCompatCustomView")
+@SuppressLint("ViewConstructor")
 @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
 class MarkdownTextView constructor(
     context: Context,
@@ -36,14 +36,18 @@ class MarkdownTextView constructor(
     private val color = context.attrValue(R.attr.colorOnBackground) //colorOnBackground
     private val focusRect = Rect()
 
-    private val searchBgHelper = mockHelper ?: SearchBgHelper(context) { top, bottom ->
+    private var searchBgHelper = mockHelper ?: SearchBgHelper(context) { top, bottom ->
         focusRect.set(0, top - context.dpToIntPx(56), width, bottom + context.dpToIntPx(56))
         // show rect on view with animation
         requestRectangleOnScreen(focusRect, false)
     }
 
     init {
-        // TODO do I have to initialize searchBgHelper  here ?
+//        searchBgHelper = mockHelper ?: SearchBgHelper(context) { top, bottom ->
+//            focusRect.set(0, top - context.dpToIntPx(56), width, bottom + context.dpToIntPx(56))
+//            // show rect on view with animation
+//            requestRectangleOnScreen(focusRect, false)
+//        }
         setTextColor(color)
         textSize = fontSize
         movementMethod = LinkMovementMethod.getInstance()

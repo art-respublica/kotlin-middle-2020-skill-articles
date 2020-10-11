@@ -104,19 +104,22 @@ class RootActivity : BaseActivity<ArticleViewModel>(), IArticleView {
             is Notify.TextMessage -> { /* nothing to do */
             }
             is Notify.ActionMessage -> {
-                snackbar.setActionTextColor(getColor(R.color.color_accent_dark))
-                snackbar.setAction(notify.actionLabel) {
-                    notify.actionHandler?.invoke()
+                val (_, label, handler) = notify
+
+                with(snackbar) {
+                    setActionTextColor(getColor(R.color.color_accent_dark))
+                    setAction(label) { handler.invoke() }
                 }
             }
             is Notify.ErrorMessage -> {
+                val (_, label, handler) = notify
+
                 with(snackbar) {
                     setBackgroundTint(getColor(R.color.design_default_color_error))
                     setTextColor(getColor(android.R.color.white))
                     setActionTextColor(getColor(android.R.color.white))
-                    setAction(notify.errLabel) {
-                        notify.errHandler?.invoke()
-                    }
+                    handler ?: return@with
+                    setAction(label) { handler.invoke() }
                 }
             }
         }

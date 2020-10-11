@@ -32,7 +32,6 @@ fun Layout.getLineBottomWithoutPadding(line: Int): Int {
     return lineBottom
 }
 
-// TODO fix bug
 /**
  * Get the line bottom discarding the line spacing added
  */
