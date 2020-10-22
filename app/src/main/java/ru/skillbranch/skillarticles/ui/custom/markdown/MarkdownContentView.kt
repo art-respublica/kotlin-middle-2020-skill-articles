@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.view.children
+import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.repositories.MarkdownElement
 import ru.skillbranch.skillarticles.extensions.dpToIntPx
 import ru.skillbranch.skillarticles.extensions.groupByBounds
@@ -88,6 +89,7 @@ class MarkdownContentView @JvmOverloads constructor(
                         .run {
                             tv.setText(this, TextView.BufferType.SPANNABLE)
                         }
+                    tv.id = R.id.tv_text_content + content.indexOf(it) + 1
                     addView(tv)
                 }
 
@@ -99,6 +101,7 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.image.text,
                         it.image.alt
                     )
+                    iv.id = R.id.tv_text_content + content.indexOf(it) + 1
                     addView(iv)
                 }
 
@@ -108,6 +111,7 @@ class MarkdownContentView @JvmOverloads constructor(
                         textSize,
                         it.blockCode.text
                     )
+                    sv.id = R.id.tv_text_content + content.indexOf(it) + 1
                     addView(sv)
                 }
             }
@@ -115,7 +119,7 @@ class MarkdownContentView @JvmOverloads constructor(
     }
 
     fun renderSearchResult(searchResult: List<Pair<Int, Int>>) {
-        children.forEach {view ->
+        children.forEach { view ->
             view as IMarkdownView
             view.clearSearchResult()
         }
