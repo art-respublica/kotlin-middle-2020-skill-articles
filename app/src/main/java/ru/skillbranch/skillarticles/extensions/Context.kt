@@ -10,6 +10,7 @@ import android.util.TypedValue
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 
 fun Context.dpToPx(dp: Int): Float {
     return TypedValue.applyDimension(
@@ -48,10 +49,12 @@ val Context.isNetworkAvailable: Boolean
         }
     }
 
-fun Context.attrValue(@AttrRes res: Int): Int{
-    val tv = TypedValue()
-    if (this.theme.resolveAttribute(res, tv, true))
-        return tv.data
-    else
-        throw Resources.NotFoundException("Resource with id $res not found")
+@ColorInt
+fun Context.attrValue(
+    @AttrRes attrColor: Int,
+    typedValue: TypedValue = TypedValue(),
+    resolveRefs: Boolean = true
+): Int {
+    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
+    return typedValue.data
 }
