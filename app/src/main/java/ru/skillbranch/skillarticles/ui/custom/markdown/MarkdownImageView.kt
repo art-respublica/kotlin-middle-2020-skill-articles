@@ -77,6 +77,9 @@ class MarkdownImageView private constructor(
         strokeWidth = 0f
     }
 
+    private var isOpen = false
+    private var aspectRatio = 0f
+
     init {
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
         iv_image = ImageView(context).apply {
@@ -135,6 +138,7 @@ class MarkdownImageView private constructor(
             iv_image.setOnClickListener {
                 if (tv_alt?.isVisible == true) animateHideAlt()
                 else animateShowAlt()
+                isOpen = !isOpen
             }
         }
     }
@@ -241,28 +245,34 @@ class MarkdownImageView private constructor(
 
     override fun onSaveInstanceState(): Parcelable? {
         val savedState = SavedState(super.onSaveInstanceState())
-        savedState.ssAltVisible = tv_alt?.isVisible ?: false
+        savedState.ssIsOpen = isOpen
+        savedState.ssAcpectRatio = (iv_image.width.toFloat() / iv_image.height)
         return savedState
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         super.onRestoreInstanceState(state)
         if (state is SavedState) {
-            tv_alt?.isVisible = state.ssAltVisible;
+            isOpen = state.ssIsOpen
+            aspectRatio = state.ssAcpectRatio
+            tv_alt?.isVisible = isOpen
         }
     }
 
     private class SavedState : BaseSavedState, Parcelable {
-        var ssAltVisible: Boolean = false
+        var ssIsOpen: Boolean = false
+        var ssAcpectRatio: Float = 0f
 
         constructor(superState: Parcelable?) : super(superState)
         constructor(src: Parcel) : super(src) {
-            ssAltVisible = src.readInt() == 1
+            ssIsOpen = src.readInt() == 1
+            ssAcpectRatio = src.readFloat()
         }
 
         override fun writeToParcel(dst: Parcel, flags: Int) {
             super.writeToParcel(dst, flags)
-            dst.writeInt(if (ssAltVisible) 1 else 0)
+            dst.writeInt(if (ssIsOpen) 1 else 0)
+            dst.writeFloat(ssAcpectRatio)
         }
 
         override fun describeContents() = 0
