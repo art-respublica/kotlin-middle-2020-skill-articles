@@ -81,6 +81,7 @@ class MarkdownContentView @JvmOverloads constructor(
 
     fun setContent(content: List<MarkdownElement>) {
         elements = content
+        var index = 0
         content.forEach {
             when (it) {
                 is MarkdownElement.Text -> {
@@ -108,6 +109,8 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.image.alt
                     )
                     addView(iv)
+                    layoutManager.attachToParent(iv, index)
+                    index++
                 }
 
                 is MarkdownElement.Scroll -> {
@@ -117,6 +120,8 @@ class MarkdownContentView @JvmOverloads constructor(
                         it.blockCode.text
                     )
                     addView(sv)
+                    layoutManager.attachToParent(sv, index)
+                    index++
                 }
             }
         }
@@ -179,15 +184,15 @@ class MarkdownContentView @JvmOverloads constructor(
         super.onRestoreInstanceState(state)
         if (state is SavedState) layoutManager = state.layout
 
-        // TODO temp solution, remove this in fragment
-        children.filter { it !is MarkdownTextView }
-            .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
+//        // TO_DO temp solution, remove this in fragment
+//        children.filter { it !is MarkdownTextView }
+//            .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
     }
 
     override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>?) {
-        // TODO temp solution, remove this in fragment
-        children.filter { it !is MarkdownTextView }
-            .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
+//        // TO_DO temp solution, remove this in fragment
+//        children.filter { it !is MarkdownTextView }
+//            .forEachIndexed { index, it -> layoutManager.attachToParent(it, index) }
 
         // save children manually without markdown text view
         children.filter { it !is MarkdownTextView }

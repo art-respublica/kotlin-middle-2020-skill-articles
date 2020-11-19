@@ -29,7 +29,7 @@
 //import ru.skillbranch.skillarticles.ui.RootActivity
 //import ru.skillbranch.skillarticles.ui.custom.spans.SearchFocusSpan
 //import ru.skillbranch.skillarticles.ui.custom.spans.SearchSpan
-//import ru.skillbranch.skillarticles.viewmodels.ArticleState
+//import ru.skillbranch.skillarticles.viewmodels.article.ArticleState
 //import java.lang.Thread.sleep
 //
 //

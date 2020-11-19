@@ -6,6 +6,7 @@ import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
+import androidx.navigation.NavDestination
 
 fun View.setMarginOptionally(
     left: Int = marginLeft, top: Int = marginTop,
@@ -21,4 +22,8 @@ fun View.setPaddingOptionally(
     top: Int = paddingTop, bottom: Int = paddingBottom
 ) {
     setPadding(left, top, right, bottom)
+}
+
+fun View.selectDestination(destination: NavDestination) {
+    // TODO homework
 }
