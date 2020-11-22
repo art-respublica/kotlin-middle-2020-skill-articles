@@ -35,7 +35,7 @@ class RootActivity : BaseActivity<RootViewModel>() {
         setupActionBarWithNavController(navController, appbarConfiguration)
 //        nav_view.setupWithNavController(navController)
 
-        nav_view.setOnNavigationItemReselectedListener {
+        nav_view.setOnNavigationItemSelectedListener {
             // if click on bottom navigation item -> navigate to destination by item id
             viewModel.navigate(NavigationCommand.To(it.itemId))
             true
