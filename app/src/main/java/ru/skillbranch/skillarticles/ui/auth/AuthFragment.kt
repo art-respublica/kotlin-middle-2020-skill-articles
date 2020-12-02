@@ -1,6 +1,8 @@
 package ru.skillbranch.skillarticles.ui.auth
 
+import android.os.Bundle
 import android.text.Spannable
+import android.view.View
 import androidx.core.text.set
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -16,6 +18,15 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
     override val viewModel: AuthViewModel by viewModels()
     override val layout: Int = R.layout.fragment_auth
     private val args: AuthFragmentArgs by navArgs()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (viewModel.isAuth()) {
+            val dest = if (args.privateDestination == -1) null else args.privateDestination
+            viewModel.navigate(NavigationCommand.FinishLogin(dest))
+        }
+    }
 
     override fun setupViews() {
         tv_privacy.setOnClickListener {

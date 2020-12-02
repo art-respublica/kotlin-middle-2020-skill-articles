@@ -19,6 +19,10 @@ class AuthViewModel(handle: SavedStateHandle) : BaseViewModel<AuthState>(handle,
         repository.setAuth(true)
         navigate(NavigationCommand.FinishLogin(dest))
     }
+
+    fun isAuth(): Boolean {
+        return repository.isAuth().value ?: false
+    }
 }
 
 data class AuthState(val isAuth: Boolean = false): IViewModelState
