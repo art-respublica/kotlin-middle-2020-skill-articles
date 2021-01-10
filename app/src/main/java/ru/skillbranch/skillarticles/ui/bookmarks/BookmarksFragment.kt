@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_bookmarks.*
 import ru.skillbranch.skillarticles.R
 import ru.skillbranch.skillarticles.data.models.ArticleItemData
+import ru.skillbranch.skillarticles.ui.articles.ArticlesAdapter
 import ru.skillbranch.skillarticles.ui.base.BaseFragment
 import ru.skillbranch.skillarticles.ui.base.Binding
 import ru.skillbranch.skillarticles.ui.base.MenuItemHolder
@@ -57,7 +58,7 @@ class BookmarksFragment : BaseFragment<BookmarksViewModel>() {
         viewModel.handleToggleBookmark(id, !isChecked)
     }
 
-    private val bookmarkAdapter = BookmarkAdapter(listener, toggleBookmarkListener)
+    private val bookmarkAdapter = ArticlesAdapter(listener, toggleBookmarkListener)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
