@@ -1,4 +1,4 @@
-package ru.skillbranch.skillarticles.ui.articles
+package ru.skillbranch.skillarticles.ui.bookmarks
 
 import android.view.View
 import android.view.ViewGroup
@@ -8,22 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.skillarticles.data.models.ArticleItemData
 import ru.skillbranch.skillarticles.ui.custom.ArticleItemView
 
-class ArticlesAdapter(
+class BookmarkAdapter(
     private val listener: (ArticleItemData) -> Unit,
     private val toggleBookmarkListener: (String, Boolean) -> Unit
 ) :
-    PagedListAdapter<ArticleItemData, ArticleVH>(ArticleDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleVH {
+    PagedListAdapter<ArticleItemData, BookmarkArticleVH>(BookmarkArticleDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkArticleVH {
         val view = ArticleItemView(parent.context)
-        return ArticleVH(view)
+        return BookmarkArticleVH(view)
     }
 
-    override fun onBindViewHolder(holder: ArticleVH, position: Int) {
+    override fun onBindViewHolder(holder: BookmarkArticleVH, position: Int) {
         holder.bind(getItem(position), listener, toggleBookmarkListener)
     }
 }
 
-class ArticleDiffCallback : DiffUtil.ItemCallback<ArticleItemData>() {
+class BookmarkArticleDiffCallback : DiffUtil.ItemCallback<ArticleItemData>() {
     override fun areItemsTheSame(oldItem: ArticleItemData, newItem: ArticleItemData): Boolean =
         oldItem.id == newItem.id
 
@@ -31,14 +31,17 @@ class ArticleDiffCallback : DiffUtil.ItemCallback<ArticleItemData>() {
         oldItem == newItem
 }
 
-class ArticleVH(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
+class BookmarkArticleVH(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
     fun bind(
         item: ArticleItemData?,
         listener: (ArticleItemData) -> Unit,
         toggleBookmarkListener: (String, Boolean) -> Unit
     ) {
         // if use placeholder item may be null
-        (containerView as ArticleItemView).bind(item!!, toggleBookmarkListener)
+        (containerView as ArticleItemView).bind(
+            item!!,
+            toggleBookmarkListener
+        )
         itemView.setOnClickListener { listener(item) }
     }
 }

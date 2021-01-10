@@ -36,13 +36,6 @@ class ArticlesViewModel(handle: SavedStateHandle) :
         }
     }
 
-//    init {
-//        subscribeOnDataSource(repository.loadArticles()) { articles, state ->
-//            articles ?: return@subscribeOnDataSource null
-//            state.copy(articles = articles)
-//        }
-//    }
-
     fun observeList(
         owner: LifecycleOwner,
         onChange: (list: PagedList<ArticleItemData>) -> Unit
@@ -117,6 +110,13 @@ class ArticlesViewModel(handle: SavedStateHandle) :
 
     fun handleSearchMode(isSearch: Boolean) {
         updateState { it.copy(isSearch = isSearch) }
+    }
+
+    fun handleToggleBookmark(id: String, isChecked: Boolean) {
+        repository.updateBookmark(id, isChecked)
+        viewModelScope.launch(Dispatchers.IO) {
+            listData.value?.dataSource?.invalidate()
+        }
     }
 }
 
