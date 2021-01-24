@@ -286,7 +286,7 @@ class Lesson8InstrumentalTest1 {
         onView(withId(R.id.rv_comments))
             .check(
                 matches(
-                    atPositionOnView(1, allOf(withText("comment text")), R.id.tv_comment_body)
+                    atPositionOnView(0, allOf(withText("comment text")), R.id.tv_comment_body)
                 )
             )
         sleep(5000)
@@ -304,7 +304,7 @@ class Lesson8InstrumentalTest1 {
         onView(withId(R.id.rv_comments))
             .check(
                 matches(
-                    atPositionOnView(1, allOf(withText("comment text")), R.id.tv_comment_body)
+                    atPositionOnView(0, allOf(withText("comment text")), R.id.tv_comment_body)
                 )
             )
     }

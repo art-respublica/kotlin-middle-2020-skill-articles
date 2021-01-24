@@ -186,6 +186,7 @@ class ArticleViewModel(
     }
 
     override fun handleSendComment(comment: String) {
+        if (comment.isBlank()) return
         if (!currentState.isAuth) navigate(NavigationCommand.StartLogin())
         viewModelScope.launch {
             repository.sendComment(articleId, comment, currentState.answerToSlug)
